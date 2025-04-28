@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -13,26 +15,30 @@ class AuthController extends Controller
     }
 
     public function store (Request $request) {
-        // var_dump('aa');
         //
         $form_type = $request->input('form_type');
-        if($form_type === 'phone') {
-            $request->validate([
-                'phone' => 'required'
-            ]);
-            $phone = $request->phone;
-            // var_dump($request->input('form_type'));
-            return view('auth.partials.code', compact('phone'));
-        } else if($form_type === "code") {
-            return Redirect::route('chat.index');
-            $request->validate([
-                'phone' => 'required',
-                'verification_code' => 'required|min:6|max:6'
-            ]);
+        try{
+            if($form_type === 'phone') {
+                $request->validate([
+                    'phone' => 'required'
+                ]);
+                $phone = $request->phone;
+                return view('auth.partials.code', compact('phone'));
+            } else if($form_type === "code") {
+                $request->validate([
+                    'phone' => 'required',
+                    'verification_code' => 'required|min:6|max:6'
+                ]);
 
-        } else {
-            return view('auth.partials.phone');
+                $user = User::firstWhere('phone', $request->phone);
+                // $userChats = 
+
+                return Redirect::route('chat.index');
+            }
+        }catch (Exception $exception) {
+
         }
+        return view('auth.partials.phone');
     }
 
     public function show (Request $request) {
