@@ -11,18 +11,29 @@ Route::get('/', function () {
     return Redirect::route('login.page');
 });
 
-Route::get('/login', [AuthController::class, 'index'])->name('login.page');
-Route::post('/signup', [AuthController::class, 'store'])->name('sign.up');
-
-Route::prefix('/chat')->group(function () {
+Route::prefix('/login')->group(function () {
     Route::get('/', function () {
-        return Redirect::to('/chat/index');
-    });
+        return Redirect::route('login.phone');
+    })->name('login.page');
 
-    Route::get('/index', [ChatController::class, 'index'])->name('chat.index');
-    Route::get('/new/{user}/', [ChatController::class, 'store'])->name('chat.new');
-    Route::get('/{phone_number}', [ChatController::class, 'show'])->name('chat.specific');
-    Route::get('/new_group/{group}', [GroupController::class, 'store'])->name('group.new');
+    Route::get('/phone', [AuthController::class, 'phone_form'])->name('login.phone');
+    Route::get('/code', [AuthController::class, 'code_form'])->name('login.code');
+});
+
+Route::post('/signup/phone', [AuthController::class, 'loginPhone'])->name('signup.phone');
+Route::post('/signup/code', [AuthController::class, 'store'])->name('signup.code');
+
+Route::middleware('auth.session')->group(function () {
+    Route::prefix('/chat')->group(function () {
+        Route::get('/', function () {
+            return Redirect::to('/chat/index');
+        });
+
+        Route::get('/index', [ChatController::class, 'index'])->name('chat.index');
+        Route::get('/new/{user}/', [ChatController::class, 'store'])->name('chat.new');
+        Route::get('/{phone_number}', [ChatController::class, 'show'])->name('chat.specific');
+        Route::get('/new_group/{group}', [GroupController::class, 'store'])->name('group.new');
+    });
 });
 
 Route::get('/sms', function (TwilioService $twilio) {

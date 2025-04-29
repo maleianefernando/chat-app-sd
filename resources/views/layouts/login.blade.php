@@ -11,10 +11,9 @@
 
 <body>
     <!-- Página de Login -->
-    <form method="POST" action="{{ route('sign.up') }}">
-        @csrf
+
         @yield('content')
-    </form>
+    {{-- </form> --}}
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
