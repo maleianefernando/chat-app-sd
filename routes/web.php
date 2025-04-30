@@ -14,7 +14,7 @@ Route::get('/', function () {
 Route::prefix('/login')->group(function () {
     Route::get('/', function () {
         return Redirect::route('login.phone');
-    })->name('login.page');
+    })->name('login');
 
     Route::get('/phone', [AuthController::class, 'phone_form'])->name('login.phone');
     Route::get('/code', [AuthController::class, 'code_form'])->name('login.code');
@@ -23,7 +23,7 @@ Route::prefix('/login')->group(function () {
 Route::post('/signup/phone', [AuthController::class, 'loginPhone'])->name('signup.phone');
 Route::post('/signup/code', [AuthController::class, 'store'])->name('signup.code');
 
-Route::middleware('auth.session')->group(function () {
+Route::middleware(['web', 'auth'])->group(function () {
     Route::prefix('/chat')->group(function () {
         Route::get('/', function () {
             return Redirect::to('/chat/index');
