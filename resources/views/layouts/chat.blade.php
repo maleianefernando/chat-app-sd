@@ -192,9 +192,15 @@
         <div class="card contact-menu shadow" id="contactMenu">
             <div class="card-body">
                 <h6 class="fw-semibold">Novo Chat</h6>
+                <input class="form-control-sm w-100 mb-2" placeholder="Telefone" id="phone-number" />
+                <a href="{{ route('chat.new', "usr") }}" class="btn btn-sm btn-outline-primary w-100 mb-2" id="">
+                    Iniciar conversa
+                </a>
+
                 <button class="btn btn-sm btn-outline-primary w-100 mb-2" id="toggleCreateGroupPopUp">
                     Criar Grupo
                 </button>
+
                 <div>
                     <small class="text-muted">Sugestões</small>
                     <div class="user-item d-flex align-items-center my-2">

@@ -26,7 +26,7 @@ Route::post('/signup/code', [AuthController::class, 'store'])->name('signup.code
 Route::middleware(['web', 'auth'])->group(function () {
     Route::prefix('/chat')->group(function () {
         Route::get('/', function () {
-            return Redirect::to('/chat/index');
+            return Redirect::route('chat.index');
         });
 
         Route::get('/index', [ChatController::class, 'index'])->name('chat.index');
