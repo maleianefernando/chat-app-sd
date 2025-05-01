@@ -11,25 +11,12 @@ use Illuminate\Support\Facades\Auth;
 class ChatController extends Controller
 {
     public function index () {
-        // $users = User::with('chats')->get();
-        // dd(Auth::user());
         $user = Auth::user();
-        $single_chat = null;
-
-        // $chats = ChatUser::where('user_id', $user->id)->get();
         $chats = $user->chats()->get();
-        foreach($chats as $chat) {
-            // dd($chat);
-            // $single_chat = Chat::find($chat->chat_id);
-            if(! $chat->is_group){
-                dd($chat->messages());
-            }
-        }
         return view('chat.index', compact('chats'));
     }
 
     public function store ($user) {
-
         $user = "Dosha";
         return view('chat.opened-chat', compact('user'));
     }
