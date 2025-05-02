@@ -30,8 +30,8 @@ Route::middleware(['web', 'auth'])->group(function () {
         });
 
         Route::get('/index', [ChatController::class, 'index'])->name('chat.index');
-        Route::get('/new/{user}/', [ChatController::class, 'store'])->name('chat.new');
-        Route::get('/{phone_number}', [ChatController::class, 'show'])->name('chat.specific');
+        Route::get('/new/{chat_id}/', [ChatController::class, 'store'])->name('chat.new');
+        Route::get('/{chat_id}', [ChatController::class, 'show'])->name('chat.specific');
         Route::get('/new_group/{group}', [GroupController::class, 'store'])->name('group.new');
     });
 });

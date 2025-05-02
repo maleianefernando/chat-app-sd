@@ -79,7 +79,6 @@ class AuthController extends Controller
             return Redirect::route('chat.index', compact('chatsUser'));
         }
         try {
-
             $request->validate([
                 'phone' => 'required|numeric',
                 'verification_code' => 'required|numeric||min_digits:6|max_digits:6',
