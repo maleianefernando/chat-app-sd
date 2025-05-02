@@ -192,10 +192,12 @@
         <div class="card contact-menu shadow" id="contactMenu">
             <div class="card-body">
                 <h6 class="fw-semibold">Novo Chat</h6>
-                <input class="form-control-sm w-100 mb-2" placeholder="Telefone" id="phone-number" />
-                <a href="{{ route('chat.new', "usr") }}" class="btn btn-sm btn-outline-primary w-100 mb-2" id="">
-                    Iniciar conversa
-                </a>
+                <form action="/chat/new/" method="POST" class="newChatForm">
+                    <input class="form-control-sm w-100 mb-2" type="number" placeholder="Telefone" id="phone-number" oninput="changeFormAction(this)"/>
+                    <button class="btn btn-sm btn-outline-primary w-100 mb-2" type="submit" id="">
+                        Iniciar conversa
+                    </button>
+                </form>
 
                 <button class="btn btn-sm btn-outline-primary w-100 mb-2" id="toggleCreateGroupPopUp">
                     Criar Grupo
@@ -204,21 +206,21 @@
                 <div>
                     <small class="text-muted">Sugestões</small>
                     <div class="user-item d-flex align-items-center my-2">
-                        <a href="{{ route('chat.new', 'usr') }}">
+                        <a href="{{ route('chat.new', '849321342') }}">
                             <img src="https://img.freepik.com/free-photo/no-idea_273609-23908.jpg?t=st=1744608982~exp=1744612582~hmac=9f2c831411c907be117bb07d9330499b08afe231d4fc7c1354ea7c0a3c1c98db&w=996"
                                 class="rounded-circle me-2" alt="User" />
                             <span>Dosha</span>
                         </a>
                     </div>
                     <div class="user-item d-flex align-items-center my-2">
-                        <a href="{{ route('chat.new', 'usr') }}">
+                        <a href="{{ route('chat.new', '872898112') }}">
                         <img src="https://img.freepik.com/free-photo/no-idea_273609-23908.jpg?t=st=1744608982~exp=1744612582~hmac=9f2c831411c907be117bb07d9330499b08afe231d4fc7c1354ea7c0a3c1c98db&w=996"
                             class="rounded-circle me-2" alt="User" />
                         <span>Mike</span>
                         </a>
                     </div>
                     <div class="user-item d-flex align-items-center my-2">
-                        <a href="{{ route('chat.new', 'usr') }}">
+                        <a href="{{ route('chat.new', '854363772') }}">
                         <img src="https://img.freepik.com/free-photo/no-idea_273609-23908.jpg?t=st=1744608982~exp=1744612582~hmac=9f2c831411c907be117bb07d9330499b08afe231d4fc7c1354ea7c0a3c1c98db&w=996"
                             class="rounded-circle me-2" alt="User" />
                         <span>Tina</span>
@@ -269,6 +271,7 @@
         const contactMenu = document.getElementById("contactMenu");
         const createGroupBtn = document.querySelector("#toggleCreateGroupPopUp");
         const createGroupPopup = document.querySelector("#createGroupMenu");
+        const newChatForm = document.querySelector(".newChatForm");
 
         togglePopup(toggleContacts, 'click', contactMenu);
         togglePopup(createGroupBtn, 'click', createGroupPopup);
@@ -291,6 +294,10 @@
             listener.addEventListener(event, () => {
                 popup.style.display = "none";
             });
+        }
+
+        function changeFormAction(input) {
+            newChatForm.action = `/chat/new/${input.value}`;
         }
     </script>
 </body>

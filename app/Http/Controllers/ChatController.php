@@ -16,13 +16,13 @@ class ChatController extends Controller
         return view('chat.index', compact('chats'));
     }
 
-    public function store ($chat_id, $chat_name) {
+    public function store ($user_phone) {
         $user = Auth::user();
-        $chat = Chat::create([
-            "is_group" => false,
-            "name" => $chat_name,
-            "created_by" => $user->id,
-        ]);
+        $other_side_user = User::where('phone', $user_phone)->first();
+
+        if($other_side_user != null){
+
+        }
         $user = "Dosha";
         return view('chat.opened-chat', compact('user'));
     }
