@@ -159,7 +159,8 @@
             display: none;
         }
 
-        .chat-item-link, .user-item a {
+        .chat-item-link,
+        .user-item a {
             text-decoration: none;
             color: #131111;
         }
@@ -193,7 +194,9 @@
             <div class="card-body">
                 <h6 class="fw-semibold">Novo Chat</h6>
                 <form action="/chat/new/" method="POST" class="newChatForm">
-                    <input class="form-control-sm w-100 mb-2" type="number" placeholder="Telefone" id="phone-number" oninput="changeFormAction(this)"/>
+                    @csrf
+                    <input class="form-control-sm w-100 mb-2" type="number" placeholder="Telefone" id="phone-number"
+                        oninput="changeFormAction(this)" />
                     <button class="btn btn-sm btn-outline-primary w-100 mb-2" type="submit" id="">
                         Iniciar conversa
                     </button>
@@ -205,27 +208,16 @@
 
                 <div>
                     <small class="text-muted">Sugestões</small>
-                    <div class="user-item d-flex align-items-center my-2">
-                        <a href="{{ route('chat.new', '849321342') }}">
-                            <img src="https://img.freepik.com/free-photo/no-idea_273609-23908.jpg?t=st=1744608982~exp=1744612582~hmac=9f2c831411c907be117bb07d9330499b08afe231d4fc7c1354ea7c0a3c1c98db&w=996"
+                    @foreach ($users as $user)
+                        <div class="user-item d-flex align-items-center my-2 new-chat-user"
+                            data-user-phone="{{ $user->phone }}">
+                            {{-- <a href="{{ route('chat.new', '$user->phone') }}"> --}}
+                            <img src="https://png.pngtree.com/png-vector/20190420/ourmid/pngtree-vector-business-man-icon-png-image_966609.jpg"
                                 class="rounded-circle me-2" alt="User" />
-                            <span>Dosha</span>
-                        </a>
-                    </div>
-                    <div class="user-item d-flex align-items-center my-2">
-                        <a href="{{ route('chat.new', '872898112') }}">
-                        <img src="https://img.freepik.com/free-photo/no-idea_273609-23908.jpg?t=st=1744608982~exp=1744612582~hmac=9f2c831411c907be117bb07d9330499b08afe231d4fc7c1354ea7c0a3c1c98db&w=996"
-                            class="rounded-circle me-2" alt="User" />
-                        <span>Mike</span>
-                        </a>
-                    </div>
-                    <div class="user-item d-flex align-items-center my-2">
-                        <a href="{{ route('chat.new', '854363772') }}">
-                        <img src="https://img.freepik.com/free-photo/no-idea_273609-23908.jpg?t=st=1744608982~exp=1744612582~hmac=9f2c831411c907be117bb07d9330499b08afe231d4fc7c1354ea7c0a3c1c98db&w=996"
-                            class="rounded-circle me-2" alt="User" />
-                        <span>Tina</span>
-                        </a>
-                    </div>
+                            <span>{{ $user->username === null ? $user->phone : $user->username }}</span>
+                            {{-- </a> --}}
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -235,26 +227,27 @@
             <div class="card-body">
                 <h6 class="fw-semibold">Criar Grupo</h6>
                 <input class="form-control-sm w-100 mb-2" placeholder="Nome do grupo" id="toggleCreateGroupPopUp" />
-                <a href="{{ route('group.new', "Informatica 2022 - 4 Ano") }}" class="btn btn-sm btn-outline-primary w-100 mb-2" id="toggleCreateGroupPopUp">
+                <a href="{{ route('group.new', 'Informatica 2022 - 4 Ano') }}"
+                    class="btn btn-sm btn-outline-primary w-100 mb-2" id="toggleCreateGroupPopUp">
                     Criar
                 </a>
                 <div>
                     <small class="text-muted">Sugestões</small>
                     <div class="user-item d-flex align-items-center my-2">
                         <input type="checkbox" value="Dosha" id="member-checkbox">
-                        <img src="https://img.freepik.com/free-photo/no-idea_273609-23908.jpg?t=st=1744608982~exp=1744612582~hmac=9f2c831411c907be117bb07d9330499b08afe231d4fc7c1354ea7c0a3c1c98db&w=996"
+                        <img src="https://png.pngtree.com/png-vector/20190420/ourmid/pngtree-vector-business-man-icon-png-image_966609.jpg"
                             class="rounded-circle me-2" alt="User" />
                         <span>Dosha</span>
                     </div>
                     <div class="user-item d-flex align-items-center my-2">
                         <input type="checkbox" value="Mike" id="member-checkbox">
-                        <img src="https://img.freepik.com/free-photo/no-idea_273609-23908.jpg?t=st=1744608982~exp=1744612582~hmac=9f2c831411c907be117bb07d9330499b08afe231d4fc7c1354ea7c0a3c1c98db&w=996"
+                        <img src="https://png.pngtree.com/png-vector/20190420/ourmid/pngtree-vector-business-man-icon-png-image_966609.jpg"
                             class="rounded-circle me-2" alt="User" />
                         <span>Mike</span>
                     </div>
                     <div class="user-item d-flex align-items-center my-2">
                         <input type="checkbox" value="Tina" id="member-checkbox">
-                        <img src="https://img.freepik.com/free-photo/no-idea_273609-23908.jpg?t=st=1744608982~exp=1744612582~hmac=9f2c831411c907be117bb07d9330499b08afe231d4fc7c1354ea7c0a3c1c98db&w=996"
+                        <img src="https://png.pngtree.com/png-vector/20190420/ourmid/pngtree-vector-business-man-icon-png-image_966609.jpg"
                             class="rounded-circle me-2" alt="User" />
                         <span>Tina</span>
                     </div>
@@ -272,6 +265,7 @@
         const createGroupBtn = document.querySelector("#toggleCreateGroupPopUp");
         const createGroupPopup = document.querySelector("#createGroupMenu");
         const newChatForm = document.querySelector(".newChatForm");
+        const newChatUser = document.querySelectorAll('.new-chat-user');
 
         togglePopup(toggleContacts, 'click', contactMenu);
         togglePopup(createGroupBtn, 'click', createGroupPopup);
@@ -299,6 +293,16 @@
         function changeFormAction(input) {
             newChatForm.action = `/chat/new/${input.value}`;
         }
+
+        const userPhoneInput = document.querySelector('#phone-number');
+        newChatUser.forEach(e => {
+            e.addEventListener('click', (event) => {
+                const userPhone = Number(event.target.dataset.userPhone);
+                userPhoneInput.value = userPhone;
+                newChatForm.action = `/chat/new/${userPhone}`;
+                newChatForm.submit();
+            })
+        });
     </script>
 </body>
 

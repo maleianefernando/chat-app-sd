@@ -8,7 +8,7 @@ use App\Services\TwilioService;
 use Illuminate\Support\Facades\Redirect;
 
 Route::get('/', function () {
-    return Redirect::route('login.page');
+    return Redirect::route('login');
 });
 
 Route::prefix('/login')->group(function () {
@@ -30,8 +30,8 @@ Route::middleware(['web', 'auth'])->group(function () {
         });
 
         Route::get('/index', [ChatController::class, 'index'])->name('chat.index');
-        Route::get('/new/{user_phone}/', [ChatController::class, 'store'])->name('chat.new');
         Route::get('/{chat_id}', [ChatController::class, 'show'])->name('chat.specific');
+        Route::POST('/new/{user_phone}/', [ChatController::class, 'store'])->name('chat.new');
         Route::get('/new_group/{group}', [GroupController::class, 'store'])->name('group.new');
     });
 });

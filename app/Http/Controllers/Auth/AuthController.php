@@ -88,7 +88,7 @@ class AuthController extends Controller
             $phone = $request->phone;
 
             $user = User::firstWhere('phone', $phone);
-            $user->username = $request->username;
+            $user->username = $request->username === null ? $user->username : $request->username;
             $user->save();
 
             if ($request->verification_code === $user->code) {

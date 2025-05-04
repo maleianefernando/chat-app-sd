@@ -9,7 +9,7 @@
         <div class="chat-header">
             <span>
                 {{
-                    $chat->is_group ? $chat->name : ($other_side_user->name ? $other_side_user->name : $other_side_user->phone)
+                    $chat->is_group ? $chat->name : ( ($other_side_user->username == null) ? $other_side_user->phone : $other_side_user->username )
                 }}
             </span>
             <div>
