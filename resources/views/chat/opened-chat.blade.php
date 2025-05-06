@@ -23,12 +23,16 @@
                 <div class="{{ $message->user_id == $user->id ? 'message sent' : 'message' }}">{{ $message->content }}</div>
             @endforeach
         </div>
+        <form method="POST" action="{{ route('message.send') }}">
+            @csrf
         <div class="chat-input">
-            <button><i class="far fa-smile"></i></button>
-            <button><i class="fas fa-paperclip"></i></button>
-            <input type="text" placeholder="Escreve uma mensagem..." />
-            <button><i class="fas fa-microphone"></i></button>
-            <button class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
-        </div>
+            {{-- <button><i class="far fa-smile"></i></button> --}}
+            {{-- <button><i class="fas fa-paperclip"></i></button> --}}
+                <input type="number" name="chat-id" value="{{ $chat->id }}" hidden>
+                <input type="text" name="message" placeholder="Escreve uma mensagem..." />
+                <button class="btn btn-primary" type="submit"><i class="fas fa-paper-plane"></i></button>
+                {{-- <button><i class="fas fa-microphone"></i></button> --}}
+            </div>
+        </form>
     </div>
 @endsection

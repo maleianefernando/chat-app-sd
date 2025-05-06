@@ -25,7 +25,7 @@ class ChatController extends Controller
                 foreach ($this_chat_users as $ct_user) {
                     if ($user->id !== $ct_user->id) {
                         $usr = User::find($ct_user->id);
-                        $chat_names["" . $this_chat->id] = $usr->username;
+                        $chat_names["" . $this_chat->id] = $usr->username == null ? $usr->phone : $usr->username;
                     }
                 }
             }
@@ -53,7 +53,7 @@ class ChatController extends Controller
                 foreach ($this_chat_users as $ct_user) {
                     if ($user->id !== $ct_user->id) {
                         $usr = User::find($ct_user->id);
-                        $chat_names["" . $this_chat->id] = $usr->username;
+                        $chat_names["" . $this_chat->id] = $usr->username == null ? $usr->phone : $usr->username;
                     }
                 }
             }
@@ -119,7 +119,7 @@ class ChatController extends Controller
                 foreach ($this_chat_users as $ct_user) {
                     if ($user->id !== $ct_user->id) {
                         $usr = User::find($ct_user->id);
-                        $chat_names["" . $this_chat->id] = $usr->username;
+                        $chat_names["" . $this_chat->id] = $usr->username == null ? $usr->phone : $usr->username;
                     }
                 }
             }

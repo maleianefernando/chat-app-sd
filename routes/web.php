@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\MessageController;
 use Illuminate\Support\Facades\Route;
 use App\Services\TwilioService;
 use Illuminate\Support\Facades\Redirect;
@@ -33,6 +34,10 @@ Route::middleware(['web', 'auth'])->group(function () {
         Route::get('/{chat_id}', [ChatController::class, 'show'])->name('chat.specific');
         Route::POST('/new/{user_phone}/', [ChatController::class, 'store'])->name('chat.new');
         Route::get('/new_group/{group}', [GroupController::class, 'store'])->name('group.new');
+    });
+
+    Route::prefix('/msg')->group(function () {
+        Route::post('/send', [MessageController::class, 'store'])->name('message.send');
     });
 });
 
