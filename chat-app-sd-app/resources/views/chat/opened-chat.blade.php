@@ -6,11 +6,10 @@
 
 @section('content')
     <div class="chat-card">
+        <input type="text" id="chat-id" value="{{ $chat->id }}" hidden>
         <div class="chat-header">
             <span>
-                {{
-                    $chat->is_group ? $chat->name : ( ($other_side_user->username == null) ? $other_side_user->phone : $other_side_user->username )
-                }}
+                {{ $chat->is_group ? $chat->name : ($other_side_user->username == null ? $other_side_user->phone : $other_side_user->username) }}
             </span>
             <div>
                 <i class="fas fa-video"></i>
@@ -18,16 +17,46 @@
                 <i class="fas fa-ellipsis-v"></i>
             </div>
         </div>
+
+        @php
+            $previous = null;
+        @endphp
         <div class="chat-messages">
             @foreach ($messages as $message)
-                <div class="{{ $message->user_id == $user->id ? 'message sent' : 'message' }}">{{ $message->content }}</div>
+                @if ($loop->index == 0)
+                    <div class="d-flex justify-content-center rounded-3 date-separator">
+                        {{ Carbon\Carbon::parse($message->created_at)->format('d/m/Y') }}
+                    </div>
+                @elseif(Carbon\Carbon::parse($message->created_at)->format('d-m-Y')
+                        ==
+                        Carbon\Carbon::parse($previous->created_at)->format('d-m-Y'))
+
+                @elseif(Carbon\Carbon::parse($message->created_at)->format('d-m-Y') == Carbon\Carbon::now()->format('d-m-Y'))
+                    <div class="d-flex justify-content-center rounded-3 date-separator">
+                        Hoje
+                    </div>
+                @else
+                    <div class="d-flex justify-content-center rounded-3 date-separator">
+                        {{ Carbon\Carbon::parse($message->created_at)->format('d/m/Y') }}
+                    </div>
+                @endif
+                @php
+                    $previous = $message;
+                @endphp
+
+                <div class="{{ $message->user_id == $user->id ? 'message sent' : 'message' }} pb-1">
+                    {{ $message->content }}
+                    <div class="d-flex justify-content-end message-footer">
+                        {{ Carbon\Carbon::parse($message->created_at)->format('H:i') }}
+                    </div>
+                </div>
             @endforeach
         </div>
         <form method="POST" action="{{ route('message.send') }}">
             @csrf
-        <div class="chat-input">
-            {{-- <button><i class="far fa-smile"></i></button> --}}
-            {{-- <button><i class="fas fa-paperclip"></i></button> --}}
+            <div class="chat-input">
+                {{-- <button><i class="far fa-smile"></i></button> --}}
+                {{-- <button><i class="fas fa-paperclip"></i></button> --}}
                 <input type="number" name="chat-id" value="{{ $chat->id }}" hidden>
                 <input type="text" name="message" placeholder="Escreve uma mensagem..." />
                 <button class="btn btn-primary" type="submit"><i class="fas fa-paper-plane"></i></button>
@@ -41,16 +70,30 @@
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
     <script>
         const chatContainer = document.querySelector('.chat-messages');
+        const chatId = document.querySelector('#chat-id').value;
 
         const socket = io("http://127.0.0.1:3000");
-        console.log('Listening...')
+        console.log('Listening...');
+
         socket.on("laravel_database_private-chat-app", (data) => {
             const message = data.data;
-            console.log(`Mensagem: ${JSON.stringify(message)}`)
+            console.log(`Mensagem: ${JSON.stringify(message)}`);
 
-            chatContainer.insertAdjacentHTML('beforeend', `
-                <div class="${ 'message' }">${message.message}</div>
-            `);
-        })
+            if (Number(chatId) === message.chat_id) {
+                chatContainer.insertAdjacentHTML('beforeend', `
+                    <div class="${ 'message' }">${message.message}</div>
+                `);
+            }
+
+            scrollToLastMsg();
+        });
+
+        window.onload = () => {
+            scrollToLastMsg();
+        }
+
+        function scrollToLastMsg() {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
     </script>
 @endsection

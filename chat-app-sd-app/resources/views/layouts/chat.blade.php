@@ -171,6 +171,20 @@
             border-radius: 50%;
             margin-right: 10px;
         }
+
+        .message-footer {
+            font-size: 0.7rem;
+            color: #7c7f81;
+            font-family: 'arial';
+        }
+
+        .date-separator {
+            background-color: #65909e54;
+            /* color: #fff; */
+            /* height: 1.9rem; */
+            /* width: 10rem; */
+
+        }
     </style>
 </head>
 

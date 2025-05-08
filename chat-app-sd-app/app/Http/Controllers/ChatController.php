@@ -7,6 +7,7 @@ use App\Models\ChatUser;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon;
 
 class ChatController extends Controller
 {
