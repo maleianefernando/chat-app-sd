@@ -304,6 +304,7 @@
             })
         });
     </script>
+    @yield('socket-listener')
 </body>
 
 </html>

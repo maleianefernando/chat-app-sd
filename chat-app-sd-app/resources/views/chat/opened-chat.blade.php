@@ -36,3 +36,21 @@
         </form>
     </div>
 @endsection
+
+@section('socket-listener')
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script>
+        const chatContainer = document.querySelector('.chat-messages');
+
+        const socket = io("http://127.0.0.1:3000");
+        console.log('Listening...')
+        socket.on("laravel_database_private-chat-app", (data) => {
+            const message = data.data;
+            console.log(`Mensagem: ${JSON.stringify(message)}`)
+
+            chatContainer.insertAdjacentHTML('beforeend', `
+                <div class="${ 'message' }">${message.message}</div>
+            `);
+        })
+    </script>
+@endsection
