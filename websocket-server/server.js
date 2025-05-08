@@ -8,7 +8,7 @@ const io = require('socket.io')(3000, {
 });
 
 io.on('connection', (socket) => {
-    console.log("Conectado no socket: " + socket.id)
+    console.log("Connected at socket: " + socket.id)
 })
 
 redis.psubscribe("laravel_database_private-chat-app", (err, count) => {
@@ -16,14 +16,10 @@ redis.psubscribe("laravel_database_private-chat-app", (err, count) => {
 });
 
 redis.on('pmessage', (pattern, channel, message) => {
-    console.log(`Canal: ${channel}\n Mensagem: ${message}`);
+    console.log(`Channel: ${channel}\n Message: ${message}`);
     const data = JSON.parse(message)
-    console.log(data)
+    // console.log(data)
 
     io.emit(channel, data);
 });
 
-redis.on('messageBuffer', function (channel, message) {
-    // Both `channel` and `message` are buffers.
-    // console.log(message)
-  });
