@@ -1,0 +1,31 @@
+# Dockerfile-laravel
+
+FROM php:8.3-apache
+
+# Instala dependências do sistema
+RUN apt-get update && apt-get install -y \
+    git unzip zip libpng-dev libjpeg-dev libfreetype6-dev libonig-dev libxml2-dev \
+    libzip-dev libpq-dev libcurl4-openssl-dev libssl-dev \
+    && docker-php-ext-install pdo pdo_mysql mysqli zip gd
+
+# Ativa o mod_rewrite do Apache
+RUN a2enmod rewrite
+
+# Instala o Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Define diretório de trabalho
+WORKDIR /var/www/html
+
+# Copia os arquivos do Laravel (opcionalmente você pode usar volumes no docker-compose)
+COPY ./chat-app-sd-app /var/www/html
+
+# Instala as dependências do Laravel
+RUN composer install
+
+# Permissões
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+
+EXPOSE 8000
+
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
