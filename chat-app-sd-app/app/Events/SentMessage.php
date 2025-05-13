@@ -2,7 +2,10 @@
 
 namespace App\Events;
 
+use App\Models\Chat;
 use App\Models\Message;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -19,13 +22,20 @@ class SentMessage implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    protected $content, $chat_id, $user_id;
+    protected $content, $chat_id, $is_group, $user_id, $username, $phone, $created_at;
 
     public function __construct(Message $message)
     {
+        $chat = Chat::find($message->chat_id);
+        $user = User::find($message->user_id);
+
         $this->content = $message->content;
-        $this->user_id = $message->user_id;
         $this->chat_id = $message->chat_id;
+        $this->is_group = $chat->is_group ? true : false;
+        $this->user_id = $user->id;
+        $this->username = $user->username;
+        $this->phone = $user->phone;
+        $this->created_at = Carbon::parse($message->created_at)->format('H:i');
     }
 
     /**
@@ -47,10 +57,14 @@ class SentMessage implements ShouldBroadcast
     public function broadcastWith () {
         $loggedUser = Auth::user();
         return [
-            'chat_id' => $this->chat_id,
-            'user_id' => $this->user_id,
             'message' => $this->content,
-            'logged_user' => $loggedUser->id
+            'chat_id' => $this->chat_id,
+            'is_group' => $this->is_group,
+            'user_id' => $this->user_id,
+            'username' => $this->username,
+            'phone' => $this->phone,
+            'logged_user' => $loggedUser->id,
+            'created_at' => $this->created_at,
         ];
     }
 }

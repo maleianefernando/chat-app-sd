@@ -99,7 +99,7 @@
 
         .message {
             max-width: 60%;
-            padding: 0.75rem 1rem;
+            padding: 0.1rem 1rem;
             border-radius: 15px;
             background-color: #e2e2e2;
             align-self: flex-start;
@@ -170,6 +170,23 @@
             height: 40px;
             border-radius: 50%;
             margin-right: 10px;
+        }
+
+        .message-header {
+            font-size: 0.8rem;
+            /* background: #0d6efd */
+            /* opacity: 0; */
+        }
+
+        .message-header .username {
+            font-weight: 800;
+            color: #7c0c6d;
+            text-overflow: wrap;
+        }
+
+        .message-header .phone {
+            font-size: 0.7rem;
+            color: #7c7f81;
         }
 
         .message-footer {
