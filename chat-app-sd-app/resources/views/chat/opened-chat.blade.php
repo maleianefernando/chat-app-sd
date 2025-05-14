@@ -8,10 +8,20 @@
     <div class="chat-card">
         <input type="text" id="chat-id" value="{{ $chat->id }}" hidden>
         <input type="text" id="user-id" value="{{ $user->id }}" hidden>
-        <div class="chat-header">
-            <span>
-                {{ $chat->is_group ? $chat->name : ($other_side_user->username == null ? $other_side_user->phone : $other_side_user->username) }}
-            </span>
+        <div class="d-flex justify-content-between align-items-center chat-header">
+            <div class="user-item opened-chat-header">
+                <img
+                    src="https://png.pngtree.com/png-vector/20190420/ourmid/pngtree-vector-business-man-icon-png-image_966609.jpg"
+                    class="rounded-circle me-2" alt="User"
+                />
+                <span class="opened-chat title">
+                    {{ $chat->is_group ? $chat->name : ($other_side_user->username == null ? $other_side_user->phone : $other_side_user->username) }}
+                </span>
+                <span class="opened-chat user-status">
+                    <input type="number" value="{{ $other_side_user->id }}" class="user-id" hidden />
+                    <span class="status-text">offline</span>
+                </span>
+            </div>
             <div>
                 <i class="fas fa-video"></i>
                 <i class="fas fa-phone mx-3"></i>
