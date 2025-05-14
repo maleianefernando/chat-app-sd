@@ -1,15 +1,12 @@
 const Redis = require("ioredis");
 const SocketServer = require("socket.io");
+const redisCredentials = require("./config/redis");
 
-const subscriber = new Redis({
-  host: "localhost",
-  port: "6379",
-});
+console.log(redisCredentials);
 
-const redis = new Redis({
-  host: "localhost",
-  port: "6379",
-});
+const subscriber = new Redis(redisCredentials.url);
+
+const redis = new Redis(redisCredentials.url);
 
 const io = SocketServer(3000, {
   cors: {
