@@ -1,5 +1,7 @@
 const userId = document.querySelector("#user-id").value;
-const onlineUsersSocket = io("http://127.0.0.1:3000", {
+const webSocketServer = `https://chat-app-sd-websockets.onrender.com`;
+
+const onlineUsersSocket = io(webSocketServer, {
     query: {
         user_id: userId,
     },
