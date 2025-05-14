@@ -165,6 +165,23 @@
             color: #131111;
         }
 
+.status-indicator {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 30px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+.status-indicator.online {
+    background-color: #28a745; /* verde */
+}
+
+.status-indicator.offline {
+    background-color: #dc3545; /* vermelho */
+}
         .user-item img {
             width: 40px;
             height: 40px;
@@ -221,6 +238,7 @@
         </button>
 
         <!-- Contact popup -->
+        <input type="text" id="user-id" value="{{ $user->id }}" hidden>
         <div class="card contact-menu shadow" id="contactMenu">
             <div class="card-body">
                 <h6 class="fw-semibold">Novo Chat</h6>
@@ -289,7 +307,8 @@
     <div class="chat-container">
         @yield('content')
     </div>
-
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script src="{{ asset('js/onlineUsers.js') }}"></script>
     <script>
         const toggleContacts = document.getElementById("toggleContacts");
         const contactMenu = document.getElementById("contactMenu");

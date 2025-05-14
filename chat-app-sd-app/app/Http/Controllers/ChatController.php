@@ -17,23 +17,27 @@ class ChatController extends Controller
         $users = User::all();
         $chats = $user->chats()->get();
         $chat_names = [];
+        $user_id_to_check_online = [];
 
         foreach ($chats as $this_chat) {
             if ($this_chat->is_group == true) {
                 $chat_names["" . $this_chat->id] = $this_chat->name;
+                $user_id_to_check_online[] = null;
             } else {
                 $this_chat_users = $this_chat->users()->get();
                 foreach ($this_chat_users as $ct_user) {
                     if ($user->id !== $ct_user->id) {
                         $usr = User::find($ct_user->id);
                         $chat_names["" . $this_chat->id] = $usr->username == null ? $usr->phone : $usr->username;
+                        $user_id_to_check_online[] = $usr->id;
                     }
                 }
             }
         }
+        // dd($user_id_to_check_online);
         // dd($chat_names);
 
-        return view('chat.index', compact('chats', 'chat_names', 'users'));
+        return view('chat.index', compact('chats', 'chat_names', 'user_id_to_check_online', 'users', 'user'));
     }
 
     public function store($user_phone)
@@ -46,20 +50,24 @@ class ChatController extends Controller
         $chat = null;
 
         $chat_names = [];
+        $user_id_to_check_online = [];
         foreach ($chats as $this_chat) {
             if ($this_chat->is_group == true) {
                 $chat_names["" . $this_chat->id] = $this_chat->name;
+                $user_id_to_check_online[] = null;
             } else {
                 $this_chat_users = $this_chat->users()->get();
                 foreach ($this_chat_users as $ct_user) {
                     if ($user->id !== $ct_user->id) {
                         $usr = User::find($ct_user->id);
                         $chat_names["" . $this_chat->id] = $usr->username == null ? $usr->phone : $usr->username;
+                        $user_id_to_check_online[] = $usr->id;
                     }
                 }
             }
         }
 
+        $message_usernames = [];
         if ($other_side_user) {
             foreach ($chats as $each_chat) {
                 $check_user = ChatUser::where('chat_id', $each_chat->id)->where('user_id', $other_side_user->id)->first();
@@ -67,8 +75,15 @@ class ChatController extends Controller
                     $chat = Chat::where('id', $check_user->chat_id)->first();
                     $chat_users = $chat->users()->get();
                     $messages = $chat->messages()->get();
+                    foreach ($messages as $msg) {
+                        $__user__ = User::find($msg->user_id);
+                        $message_usernames[] = [
+                            "username" => $__user__->username,
+                            "phone" => $__user__->phone
+                        ];
+                    }
 
-                    return view('chat.opened-chat', compact('chats', 'chat', 'chat_users', 'chat_names', 'other_side_user', 'messages', 'user', 'users'));
+                    return view('chat.opened-chat', compact('chats', 'chat', 'chat_users', 'chat_names', 'user_id_to_check_online', 'other_side_user', 'messages', 'message_usernames', 'user', 'users'));
                 }
             }
 
@@ -89,8 +104,12 @@ class ChatController extends Controller
             ]);
 
             $messages = $chat->messages()->get();
+            foreach ($messages as $msg) {
+                $__user__ = User::find($msg->user_id);
+                $message_usernames[] = ["username" => $__user__->username, "phone" => $__user__->phone];
+            }
 
-            return view('chat.opened-chat', compact('chats', 'chat', 'chat_names', 'other_side_user', 'messages', 'user', 'users'));
+            return view('chat.opened-chat', compact('chats', 'chat', 'chat_names', 'other_side_user', 'messages', 'message_usernames', 'user', 'users'));
         }
     }
 
@@ -103,6 +122,7 @@ class ChatController extends Controller
         $chat = Chat::find($chat_id);
         $chat_users = $chat->users()->get();
         $chat_names = [];
+        $user_id_to_check_online = [];
         $other_side_user = null;
 
         if ($chat->is_group == false) {
@@ -115,20 +135,28 @@ class ChatController extends Controller
         foreach ($chats as $this_chat) {
             if ($this_chat->is_group == true) {
                 $chat_names["" . $this_chat->id] = $this_chat->name;
+                $user_id_to_check_online[] = null;
             } else {
                 $this_chat_users = $this_chat->users()->get();
                 foreach ($this_chat_users as $ct_user) {
                     if ($user->id !== $ct_user->id) {
                         $usr = User::find($ct_user->id);
                         $chat_names["" . $this_chat->id] = $usr->username == null ? $usr->phone : $usr->username;
+                        $user_id_to_check_online[] = $usr->id;
                     }
                 }
             }
         }
 
         $messages = $chat->messages()->get();
+        $message_usernames = [];
+        foreach ($messages as $msg) {
+            $__user__ = User::find($msg->user_id);
+            $message_usernames[] = ["username" => $__user__->username, "phone" => $__user__->phone];
+        }
 
-        return view('chat.opened-chat', compact('chats', 'chat', 'chat_users', 'chat_names', 'other_side_user', 'messages', 'user', 'users'));
+        // dd($user_id_to_check_online);
+        return view('chat.opened-chat', compact('chats', 'chat', 'chat_users', 'chat_names', 'user_id_to_check_online', 'other_side_user', 'messages', 'message_usernames', 'user', 'users'));
     }
 
     public function update() {}

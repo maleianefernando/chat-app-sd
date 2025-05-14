@@ -7,6 +7,7 @@
 @section('content')
     <div class="chat-card">
         <input type="text" id="chat-id" value="{{ $chat->id }}" hidden>
+        <input type="text" id="user-id" value="{{ $user->id }}" hidden>
         <div class="chat-header">
             <span>
                 {{ $chat->is_group ? $chat->name : ($other_side_user->username == null ? $other_side_user->phone : $other_side_user->username) }}
@@ -44,10 +45,12 @@
                 @endphp
 
                 <div class="{{ $message->user_id == $user->id ? 'message sent' : 'message' }} pb-1">
+                    @if($chat->is_group && $user->id != $message->user_id)
                     <div class="d-flex justify-content-between message-header">
-                        <span class="username"></span>
-                        <span class="phone"></span>
+                        <span class="username">{{ $message_usernames[$loop->index]['username'] }}</span>
+                        <span class="phone">{{ $message_usernames[$loop->index]['phone'] }}</span>
                     </div>
+                    @endif
                     <span class="message-text">{{ $message->content }}</span>
                     <div class="d-flex justify-content-end message-footer">
                         {{ Carbon\Carbon::parse($message->created_at)->format('H:i') }}
@@ -71,6 +74,7 @@
 
 @section('socket-listener')
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    {{-- <script src="{{ asset('js/onlineUsers.js') }}"></script> --}}
     <script>
         const chatContainer = document.querySelector('.chat-messages');
         const chatId = document.querySelector('#chat-id').value;
@@ -110,7 +114,6 @@
                     document.querySelector(`.message-header.chat-${message.chat_id}`).remove();
                 }
             }
-
             scrollToLastMsg();
         });
 
