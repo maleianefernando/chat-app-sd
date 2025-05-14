@@ -1,52 +1,7 @@
-const Redis = require("ioredis");
-const SocketServer = require("socket.io");
-const redisCredentials = require("./config/redis");
+const redisPubSub = require("./src/redis/subscriber/index");
+const onlineUsersListener = require("./src/redis/online-users-listener");
 
-console.log(redisCredentials);
-
-const subscriber = new Redis(redisCredentials.url);
-
-const redis = new Redis(redisCredentials.url);
-
-const io = SocketServer(3000, {
-  cors: {
-    origin: "*",
-  },
-});
-
-const onlineUserEvent = "online_users";
-const messageChannel = "laravel_database_private-chat-app";
-
-io.on("connection", (socket) => {
-  console.log("Connected at socket: " + socket.id);
-
-  const userId = socket.handshake.query.user_id;
-
-  if (userId) {
-    redis.sadd(onlineUserEvent, userId);
-    emitOnlineUsers();
-
-    socket.on("disconnect", async () => {
-    //   redis.publish("user-offline", JSON.stringify({ user_id: userId }));
-      await redis.srem(onlineUserEvent, userId);
-      emitOnlineUsers();
-    });
-  }
-});
-
-subscriber.psubscribe(messageChannel, (err, count) => {
-  console.log(count);
-});
-
-subscriber.on("pmessage", (pattern, channel, message) => {
-  console.log(`Channel: ${channel}\n Message: ${message}`);
-  const data = JSON.parse(message);
-
-  io.emit(channel, data);
-});
-
-async function emitOnlineUsers() {
-  const onlineUsers = await redis.smembers(onlineUserEvent);
-  console.log(onlineUsers);
-  io.emit(onlineUserEvent, onlineUsers);
-}
+(() => {
+  redisPubSub();
+  onlineUsersListener();
+})();
