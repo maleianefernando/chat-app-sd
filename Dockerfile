@@ -21,6 +21,9 @@ RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 # Garante permissões
 RUN chmod -R 775 storage bootstrap/cache
 
+RUN php artisan config:cache && \
+    php artisan migrate --force
+
 EXPOSE 8000
 
 # Inicia servidor Laravel
