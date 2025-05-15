@@ -31,7 +31,7 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 # Use try/catch ou `|| true` se quiser evitar falhas no build caso o DB não esteja pronto
 # RUN php artisan config:cache \
     # && php artisan migrate --force || true
-RUN php artisan migrate
+RUN php artisan migrate:fresh --force
 RUN php artisan config:cache
 RUN php artisan cache:clear
 RUN php artisan config:clear
