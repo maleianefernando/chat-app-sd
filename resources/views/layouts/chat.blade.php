@@ -324,7 +324,7 @@
         @yield('content')
     </div>
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
-    <script src="{{ asset('js/onlineUsers.js') }}"></script>
+    <script src="/js/onlineUsers.js"></script>
     <script>
         const toggleContacts = document.getElementById("toggleContacts");
         const contactMenu = document.getElementById("contactMenu");
