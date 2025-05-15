@@ -68,7 +68,7 @@
                 </div>
             @endforeach
         </div>
-        <form method="POST" action="{{ route('message.send') }}">
+        <form method="POST" action="/msg/send">
             @csrf
             <div class="chat-input">
                 {{-- <button><i class="far fa-smile"></i></button> --}}
