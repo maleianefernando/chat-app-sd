@@ -32,7 +32,7 @@ Route::middleware(['web', 'auth'])->group(function () {
 
         Route::get('/index', [ChatController::class, 'index'])->name('chat.index');
         Route::get('/{chat_id}', [ChatController::class, 'show'])->name('chat.specific');
-        Route::POST('/new/{user_phone}/', [ChatController::class, 'store'])->name('chat.new');
+        Route::post('/new/{user_phone}/', [ChatController::class, 'store'])->name('chat.new');
         Route::get('/new_group/{group}', [GroupController::class, 'store'])->name('group.new');
     });
 

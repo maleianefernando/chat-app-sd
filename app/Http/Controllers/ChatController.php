@@ -64,6 +64,7 @@ class ChatController extends Controller
                         $user_id_to_check_online[] = $usr->id;
                     }
                 }
+                // dd($user_id_to_check_online);
             }
         }
 

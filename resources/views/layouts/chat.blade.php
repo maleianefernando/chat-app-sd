@@ -258,7 +258,7 @@
         <div class="card contact-menu shadow" id="contactMenu">
             <div class="card-body">
                 <h6 class="fw-semibold">Novo Chat</h6>
-                <form action="/chat/new/" method="POST" class="newChatForm">
+                <form method="POST" action="/chat/new/" class="newChatForm">
                     @csrf
                     <input class="form-control-sm w-100 mb-2" type="number" placeholder="Telefone" id="phone-number"
                         oninput="changeFormAction(this)" />
@@ -357,6 +357,7 @@
         }
 
         function changeFormAction(input) {
+            newChatForm.method = 'POST';
             newChatForm.action = `/chat/new/${input.value}`;
         }
 
