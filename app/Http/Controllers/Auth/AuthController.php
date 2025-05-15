@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\ChatUser;
 use App\Models\User;
+use App\Services\TwilioService;
 use Brick\Math\BigInteger;
 use Exception;
 use Illuminate\Http\Request;
@@ -62,8 +63,9 @@ class AuthController extends Controller
             $code = random_int(100000, 999999);
             $user->code = $code;
             $user->save();
+            $this->sendMessage($user->phone, $user->code);
 
-            return Redirect::route('login.code', compact('phone'));
+            return Redirect::route('login.code', compact('phone'))->with('success', "Código OTP enviado para ". $user->phone . "\nOTP: ".$user->code);
             // return view('auth.partials.code', compact('phone'));
         } catch (ValidationException $exception) {
             return Redirect::back()->with('error', $exception->getMessage());
@@ -105,6 +107,17 @@ class AuthController extends Controller
             return Redirect::back()->with('error', $exception->getMessage());
         }
         return view('auth.partials.code');
+    }
+
+    public function sendMessage($phone, $otp)
+    {
+        $twilio = app(TwilioService::class);
+        try {
+            $message = $twilio->sendSms('+258'. $phone, "\nSistemas Distribuidos\nOTP: " . $otp);
+            return $message;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     public function show(Request $request) {}
