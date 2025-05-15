@@ -2,7 +2,7 @@
 @section('title', 'Codigo de verificacao')
 
 @section('content')
-    <form method="POST" action="/login/phone">
+    <form method="POST" action="/signup/phone">
         @csrf
         <div class="container d-flex justify-content-center align-items-center min-vh-100" id="login-screen">
             <div class="card p-4 shadow-lg" style="width: 100%; max-width: 400px">
