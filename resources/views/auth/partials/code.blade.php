@@ -2,7 +2,7 @@
 @section('title', 'Seu telefone')
 
 @section('content')
-    <form method="POST" action="{{ route('signup.code') }}">
+    <form method="POST" action="/login/code">
         @csrf
         <div class="container d-flex justify-content-center align-items-center min-vh-100" id="code-screen">
             <div class="card p-4 shadow-lg" style="width: 100%; max-width: 400px">
