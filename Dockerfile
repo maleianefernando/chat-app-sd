@@ -4,6 +4,7 @@ FROM php:8.3-apache
 RUN apt-get update && apt-get install -y \
     git curl libpng-dev libjpeg-dev libonig-dev libxml2-dev zip unzip \
     libzip-dev libpq-dev libssl-dev \
+    netcat \
     && docker-php-ext-install pdo pdo_mysql pdo_pgsql mbstring zip bcmath gd
 
 # Ativar o mod_rewrite do Apache
@@ -26,13 +27,6 @@ RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
 # Dar permissões à storage e bootstrap/cache
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-
-# Rodar as migrations automaticamente (opcional, se o banco já estiver disponível)
-# Use try/catch ou `|| true` se quiser evitar falhas no build caso o DB não esteja pronto
-# RUN php artisan config:cache \
-    # && php artisan migrate --force || true
-
-RUN apt-get update && apt-get install -y netcat
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
