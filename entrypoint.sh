@@ -6,9 +6,9 @@ until nc -z $DB_HOST 5432; do
   sleep 2
 done
 
-RUN php artisan migrate:fresh --force
-RUN php artisan config:cache
-RUN php artisan cache:clear
-RUN php artisan config:clear
-RUN php artisan route:cache
+php artisan migrate:fresh --force
+php artisan config:cache
+php artisan cache:clear
+php artisan config:clear
+php artisan route:cache
 exec apache2-foreground
