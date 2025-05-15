@@ -31,11 +31,10 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 # Use try/catch ou `|| true` se quiser evitar falhas no build caso o DB não esteja pronto
 # RUN php artisan config:cache \
     # && php artisan migrate --force || true
-RUN php artisan migrate:fresh --force
-RUN php artisan config:cache
-RUN php artisan cache:clear
-RUN php artisan config:clear
-RUN php artisan route:cache
+
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+ENTRYPOINT ["entrypoint.sh"]
 
 # RUN php artisan config:cache && \
     # php artisan migrate --force
