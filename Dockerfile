@@ -23,14 +23,15 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Instala dependências PHP
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+RUN php artisan key:generate
 
 # Dar permissões à storage e bootstrap/cache
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Rodar as migrations automaticamente (opcional, se o banco já estiver disponível)
 # Use try/catch ou `|| true` se quiser evitar falhas no build caso o DB não esteja pronto
-RUN php artisan config:cache \
-    && php artisan migrate --force || true
+# RUN php artisan config:cache \
+    # && php artisan migrate --force || true
 
 # RUN php artisan config:cache && \
     # php artisan migrate --force
