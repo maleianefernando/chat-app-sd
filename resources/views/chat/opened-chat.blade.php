@@ -94,7 +94,7 @@
         const messageFooter = document.querySelector('.message-footer');
         // const webSocketServer = `https://chat-app-sd-websockets.onrender.com`;
 
-        const socket = io(webSocketServer);
+        const socket = io("https://chat-app-sd-websockets.onrender.com");
         console.log('Listening...');
 
         socket.on("laravel_database_private-chat-app", (data) => {
