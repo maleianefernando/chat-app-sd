@@ -32,6 +32,8 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 # RUN php artisan config:cache \
     # && php artisan migrate --force || true
 
+RUN apt-get update && apt-get install -y netcat
+
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["entrypoint.sh"]

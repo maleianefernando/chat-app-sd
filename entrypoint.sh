@@ -6,7 +6,7 @@ until nc -z $DB_HOST 5432; do
   sleep 2
 done
 
-php artisan migrate:fresh --force
+php artisan migrate --force
 php artisan config:cache
 php artisan cache:clear
 php artisan config:clear
