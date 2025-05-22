@@ -101,9 +101,10 @@
 
         socket.on("laravel_database_private-chat-app", (data) => {
             const message = data.data;
-            // console.log(`Mensagem: ${JSON.stringify(message)}`);
+            console.log(message);
 
             if (String(chatId) === String(message.chat_id)) {
+                console.log('inside');
                 chatContainer.insertAdjacentHTML('beforeend', `
                     <div class="message">
                         <div class="d-flex justify-content-between message-header chat-${message.chat_id}">
@@ -127,6 +128,7 @@
                     document.querySelector(`.message-header.chat-${message.chat_id}`).remove();
                 }
             }
+            console.log('after')
             scrollToLastMsg();
         });
 
