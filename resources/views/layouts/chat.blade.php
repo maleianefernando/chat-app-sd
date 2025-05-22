@@ -301,6 +301,7 @@
                     Criar
                 </button>
                 <div class="overflow-auto" style="max-height: 300px;">
+                    
                     <form action="post" action="/group/create" class="new-group-form form d-none">
                         @csrf
                         <input type="text" name="ids" id="users-ids">
