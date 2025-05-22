@@ -272,7 +272,7 @@
                     Criar Grupo
                 </button>
 
-                <div>
+                <div class="overflow-auto" style="max-height: 300px;">
                     <small class="text-muted">Sugestões</small>
                     @foreach ($users as $user)
                         <div class="user-item d-flex align-items-center my-2 new-chat-user"
