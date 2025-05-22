@@ -172,6 +172,7 @@
             border-radius: 50%;
             border: 2px solid white;
         }
+
         .status-indicator.online {
             background-color: #28a745;
         }
@@ -291,31 +292,29 @@
         <div class="card contact-menu shadow" id="createGroupMenu">
             <div class="card-body">
                 <h6 class="fw-semibold">Criar Grupo</h6>
-                <input class="form-control-sm w-100 mb-2" placeholder="Nome do grupo" id="toggleCreateGroupPopUp" />
-                <a href="{{ route('group.new', 'Informatica 2022 - 4 Ano') }}"
-                    class="btn btn-sm btn-outline-primary w-100 mb-2" id="toggleCreateGroupPopUp">
+
+                <input class="group-name user-input form-control-sm w-100 mb-2" placeholder="Nome do grupo"
+                    id="toggleCreateGroupPopUp input" />
+
+                <button href="/chat/new_group/" class="create-group-link btn btn-sm btn-outline-primary w-100 mb-2"
+                    id="toggleCreateGroupPopUp">
                     Criar
-                </a>
+                </button>
                 <div>
+                    <form action="post" action="/group/create" class="new-group-form form d-none">
+                        @csrf
+                        <input type="text" name="ids" id="users-ids">
+                        <input type="text" name="group-name" id="group-name">
+                    </form>
                     <small class="text-muted">Sugestões</small>
-                    <div class="user-item d-flex align-items-center my-2">
-                        <input type="checkbox" value="Dosha" id="member-checkbox">
-                        <img src="https://png.pngtree.com/png-vector/20190420/ourmid/pngtree-vector-business-man-icon-png-image_966609.jpg"
-                            class="rounded-circle me-2" alt="User" />
-                        <span>Dosha</span>
-                    </div>
-                    <div class="user-item d-flex align-items-center my-2">
-                        <input type="checkbox" value="Mike" id="member-checkbox">
-                        <img src="https://png.pngtree.com/png-vector/20190420/ourmid/pngtree-vector-business-man-icon-png-image_966609.jpg"
-                            class="rounded-circle me-2" alt="User" />
-                        <span>Mike</span>
-                    </div>
-                    <div class="user-item d-flex align-items-center my-2">
-                        <input type="checkbox" value="Tina" id="member-checkbox">
-                        <img src="https://png.pngtree.com/png-vector/20190420/ourmid/pngtree-vector-business-man-icon-png-image_966609.jpg"
-                            class="rounded-circle me-2" alt="User" />
-                        <span>Tina</span>
-                    </div>
+                    @foreach ($users as $user)
+                        <div class="user-item d-flex align-items-center my-2">
+                            <input type="checkbox" value="{{ $user->id }}" id="member-checkbox">
+                            <img src="https://png.pngtree.com/png-vector/20190420/ourmid/pngtree-vector-business-man-icon-png-image_966609.jpg"
+                                class="rounded-circle me-2" alt="User" />
+                            <span>{{ $user->username === null ? $user->phone : $user->username }}</span>
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -332,6 +331,8 @@
         const createGroupPopup = document.querySelector("#createGroupMenu");
         const newChatForm = document.querySelector(".newChatForm");
         const newChatUser = document.querySelectorAll('.new-chat-user');
+        const usersCheckbox = document.querySelectorAll('#member-checkbox');
+        const createGroupLinkBtn = document.querySelector('.create-group-link.btn');
 
         togglePopup(toggleContacts, 'click', contactMenu);
         togglePopup(createGroupBtn, 'click', createGroupPopup);
@@ -364,12 +365,41 @@
         const userPhoneInput = document.querySelector('#phone-number');
         newChatUser.forEach(e => {
             e.addEventListener('click', (event) => {
-                const userPhone = Number(event.target.dataset.userPhone);
+                // console.log(event.currentTarget)
+                const userPhone = Number(event.currentTarget.dataset.userPhone);
                 userPhoneInput.value = userPhone;
                 newChatForm.action = `/chat/new/${userPhone}`;
                 newChatForm.submit();
             })
         });
+
+        let checkedIds = [];
+        const groupName = document.querySelector('.group-name.user-input');
+        const usersInputIdsForm = document.querySelector('.new-group-form #users-ids');
+        const groupNameForm = document.querySelector('.new-group-form #group-name');
+
+        groupName.addEventListener('input', (e) => {
+            groupNameForm.value = groupName.value;
+        });
+
+        usersCheckbox.forEach(element => {
+            element.addEventListener('change', (e) => {
+                if (element.checked) {
+                    checkedIds.push(element.value);
+                    usersInputIdsForm.value = checkedIds;
+                    groupNameForm.value = groupName.value;
+                }
+            })
+        });
+
+        createGroupLinkBtn.addEventListener('click', (e) => {
+            const form = document.querySelector('.new-group-form.form');
+            form.action = '/group/create';
+            form.method = 'post';
+            form.submit();
+
+            console.log(form)
+        })
     </script>
     @yield('socket-listener')
 </body>

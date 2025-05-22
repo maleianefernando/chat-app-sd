@@ -63,7 +63,7 @@ class AuthController extends Controller
             $code = random_int(100000, 999999);
             $user->code = $code;
             $user->save();
-            $this->sendMessage($user->phone, $user->code);
+            // $this->sendMessage($user->phone, $user->code);
 
             return Redirect::route('login.code', compact('phone'))->with('success', "Código OTP enviado para ". $user->phone . "\nOTP: ".$user->code);
             // return view('auth.partials.code', compact('phone'));

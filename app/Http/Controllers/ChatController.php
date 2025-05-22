@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon;
+use Illuminate\Support\Facades\Redirect;
 
 class ChatController extends Controller
 {
@@ -84,7 +85,8 @@ class ChatController extends Controller
                         ];
                     }
 
-                    return view('chat.opened-chat', compact('chats', 'chat', 'chat_users', 'chat_names', 'user_id_to_check_online', 'other_side_user', 'messages', 'message_usernames', 'user', 'users'));
+                    return Redirect::to('/chat/'.$chat->id);
+                    // return view('chat.opened-chat', compact('chats', 'chat', 'chat_users', 'chat_names', 'user_id_to_check_online', 'other_side_user', 'messages', 'message_usernames', 'user', 'users'));
                 }
             }
 
@@ -110,6 +112,7 @@ class ChatController extends Controller
                 $message_usernames[] = ["username" => $__user__->username, "phone" => $__user__->phone];
             }
 
+            return Redirect::to('/chat/'.$chat->id);
             return view('chat.opened-chat', compact('chats', 'chat', 'chat_names', 'other_side_user', 'messages', 'message_usernames', 'user', 'users'));
         }
     }

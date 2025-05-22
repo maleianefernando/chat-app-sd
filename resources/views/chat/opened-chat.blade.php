@@ -18,8 +18,10 @@
                     {{ $chat->is_group ? $chat->name : ($other_side_user->username == null ? $other_side_user->phone : $other_side_user->username) }}
                 </span>
                 <span class="opened-chat user-status">
+                    @if(isset($other_side_user->id))
                     <input type="number" value="{{ $other_side_user->id }}" class="user-id" hidden />
                     <span class="status-text">offline</span>
+                    @endif
                 </span>
             </div>
             <div>
